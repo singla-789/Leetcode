@@ -1,39 +1,55 @@
-class Solution {
+class Dsu{
+    int[] par ;
+    int[] rank;
 
-    HashMap<Integer, ArrayList<Integer>> adj = new HashMap<>();
-
-    private boolean dfs(int curr, int target, boolean[] vis) {
-        if (curr == target) return true;
-
-        vis[curr] = true;
-
-        if (!adj.containsKey(curr)) return false;
-
-        for (int nei : adj.get(curr)) {
-            if (!vis[nei]) {
-                if (dfs(nei, target, vis)) {
-                    return true;
-                }
-            }
+    public Dsu(int n ){
+        this.par = new int[n];
+        this.rank = new int[n];
+        for(int i = 0;i<n;i++){
+            par[i] =i;
         }
-        return false;
     }
 
-    public int[] findRedundantConnection(int[][] edges) {
+    public int find(int a){
+        if(a==par[a]) return a;
+        return find(par[a]);
+    }
 
-        for (int[] arr : edges) {
+    public void union(int a,int b){
+        int pa = find(a);
+        int pb = find(b);
+
+        if(rank[pa] == rank[pb]){
+            rank[pa]++;
+            par[pb] = pa; 
+        }else if(rank[pa]<rank[pb]){
+            par[pa] = pb;
+        }else{
+            par[pb] = pa;
+        }
+    }
+
+
+
+}
+class Solution {
+    public int[] findRedundantConnection(int[][] edges) {
+        int n = edges.length+1;
+        Dsu dsu = new Dsu(n);
+
+        for(int[] arr: edges){
             int a = arr[0];
             int b = arr[1];
 
-            boolean[] vis = new boolean[edges.length + 1];
-            if (adj.containsKey(a) && adj.containsKey(b) && dfs(a, b, vis)) {
-                return arr;
-            }
+            if(dsu.find(a) == dsu.find(b)) return arr;
 
-            adj.computeIfAbsent(a, k -> new ArrayList<>()).add(b);
-            adj.computeIfAbsent(b, k -> new ArrayList<>()).add(a);
-        }
+            dsu.union(a,b);
 
-        return new int[0];
+
+        } 
+
+        return new int[2];
+
+
     }
 }
