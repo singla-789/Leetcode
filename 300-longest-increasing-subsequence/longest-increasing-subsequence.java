@@ -1,30 +1,34 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        int n = nums.length;
-        ArrayList<Integer> ans = new ArrayList<>();
-        ans.add(nums[0]);
-        for(int i=1;i<n;i++){
-            if(nums[i]>ans.get(ans.size()-1)){
-                ans.add(nums[i]);
-            }else if(nums[i]<ans.get(ans.size()-1)){
-                ans.set(bs(ans,nums[i]),nums[i]);
+        List<Integer> res = new ArrayList<>();
+
+        for (int n : nums) {
+            if (res.isEmpty() || res.get(res.size() - 1) < n) {
+                res.add(n);
+            } else {
+                int idx = binarySearch(res, n);
+                res.set(idx, n);
             }
         }
-        return ans.size();
+
+        return res.size();        
     }
 
-    public int bs(ArrayList<Integer> ans,int a){
-        int l =0;
-        int r = ans.size()-1;
-        while(l<=r){
-            int m = l +(r-l)/2;
-            if(ans.get(m) == a) return m;
-            if(ans.get(m)>a){
-                r = m-1;
-            }else{
-                l = m+1;
+    private int binarySearch(List<Integer> arr, int target) {
+        int left = 0;
+        int right = arr.size() - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (arr.get(mid) == target) {
+                return mid;
+            } else if (arr.get(mid) > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
-        return l;
-    }
+
+        return left;
+    }    
 }
