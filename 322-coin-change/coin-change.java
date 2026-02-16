@@ -1,19 +1,21 @@
 class Solution {
-    public int coinChange(int[] nums, int am) {
-        int n = nums.length;
-        int inf = am + 1;
+    public int coinChange(int[] coins, int am) {
+        int n = coins.length;
         int dp[][] = new int[n+1][am+1];
-        for(int i = 1;i<=am;i++){
-            dp[0][i] = inf;
-        }
-        for(int i =1;i<=n;i++){
-            for(int j =1;j<=am;j++){
+        Arrays.fill(dp[0],Integer.MAX_VALUE);
+        dp[0][0] = 0;
+
+        for(int i =1;i<n+1;i++){
+            for(int j =1;j<am+1;j++){
                 dp[i][j] = dp[i-1][j];
-                if(nums[i-1]<=j){
-                    dp[i][j] = Math.min(dp[i][j],1+dp[i][j-nums[i-1]]);
-                }
+                if (j >= coins[i-1] && dp[i][j - coins[i-1]] != Integer.MAX_VALUE) {
+    dp[i][j] = Math.min(dp[i][j],
+                        dp[i][j - coins[i-1]] + 1);
+}
+
             }
         }
-        return dp[n][am]>=inf ? -1: dp[n][am];
+
+        return dp[n][am]>=0 && dp[n][am]!=Integer.MAX_VALUE ? dp[n][am]: -1;
     }
 }
