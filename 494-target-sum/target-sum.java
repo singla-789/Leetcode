@@ -1,24 +1,22 @@
 class Solution {
-
     public int findTargetSumWays(int[] nums, int target) {
-        int total = 0;
-        for (int x : nums) total += x;
+        int sum = 0;
+        for(int num : nums) sum += num;
 
-        // Invalid cases
-        if (total < Math.abs(target) || (total + target) % 2 != 0)
-            return 0;
+        if (sum < Math.abs(target)) return 0;
+        if ((target + sum) % 2 != 0) return 0;
 
-        int s = (total + target) / 2;
+        int t = (target + sum) / 2;
 
-        int[] dp = new int[s + 1];
+        int[] dp = new int[t + 1];
         dp[0] = 1;
 
-        for (int num : nums) {
-            for (int j = s; j >= num; j--) {
+        for(int num : nums) {
+            for(int j = t; j >= num; j--) {
                 dp[j] += dp[j - num];
             }
         }
 
-        return dp[s];
+        return dp[t];
     }
 }
