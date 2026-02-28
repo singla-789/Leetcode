@@ -45,4 +45,16 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0098-validate-binary-search-tree](https://github.com/singla-789/Leetcode/tree/master/0098-validate-binary-search-tree) |
+## Math
+|  |
+| ------- |
+| [1680-concatenation-of-consecutive-binary-numbers](https://github.com/singla-789/Leetcode/tree/master/1680-concatenation-of-consecutive-binary-numbers) |
+## Bit Manipulation
+|  |
+| ------- |
+| [1680-concatenation-of-consecutive-binary-numbers](https://github.com/singla-789/Leetcode/tree/master/1680-concatenation-of-consecutive-binary-numbers) |
+## Simulation
+|  |
+| ------- |
+| [1680-concatenation-of-consecutive-binary-numbers](https://github.com/singla-789/Leetcode/tree/master/1680-concatenation-of-consecutive-binary-numbers) |
 <!---LeetCode Topics End-->
