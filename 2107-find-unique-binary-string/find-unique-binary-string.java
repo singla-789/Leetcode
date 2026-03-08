@@ -1,7 +1,7 @@
 class Solution {
     public String findDifferentBinaryString(String[] nums) {
         int n = nums.length;
-        boolean[] res = new boolean[1 << n];  
+        boolean[] res = new boolean[1 << n];   // 2^n
 
         for (String a : nums) {
             int curr = Integer.parseInt(a, 2);
