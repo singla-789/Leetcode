@@ -4,8 +4,6 @@ class Solution {
     public int largestSubmatrix(int[][] matrix) {
         int n = matrix.length;
         int m = matrix[0].length;
-
-        // Build heights
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (matrix[i][j] != 0) {
