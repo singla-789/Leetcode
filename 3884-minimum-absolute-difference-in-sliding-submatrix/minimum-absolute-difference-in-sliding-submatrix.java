@@ -7,20 +7,23 @@ class Solution {
 
         for (int i = 0; i <= m - k; i++) {
             for (int j = 0; j <= n - k; j++) {
-                List<Integer> v = new ArrayList<>();
-                for (int x = i; x < i + k; x++)
-                    for (int y = j; y < j + k; y++)
-                        v.add(grid[x][y]);
-
-                Collections.sort(v);
-                int mn = Integer.MAX_VALUE;
-                int prev = v.get(0);
-                for (int p = 1; p < v.size(); p++) {
-                    if (v.get(p) != prev)
-                        mn = Math.min(mn, v.get(p) - prev);
-                    prev = v.get(p);
+                TreeSet<Integer> set = new TreeSet<>();
+                for(int x = i;x<i+k;x++){
+                    for(int y = j;y<j+k;y++){
+                        set.add(grid[x][y]);
+                    }
                 }
-                ans[i][j] = (mn == Integer.MAX_VALUE) ? 0 : mn;
+
+                Iterator<Integer> it = set.iterator();
+                int pre = it.next();
+                int min = Integer.MAX_VALUE;
+
+                while(it.hasNext()){
+                    int curr = it.next();
+                    min = Math.min(min,Math.abs(curr-pre));
+                    pre = curr;
+                }
+                ans[i][j] = min==Integer.MAX_VALUE ? 0:min ;
             }
         }
         return ans;
