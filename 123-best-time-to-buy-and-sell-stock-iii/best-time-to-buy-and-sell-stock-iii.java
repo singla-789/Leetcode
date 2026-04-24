@@ -1,37 +1,29 @@
 class Solution {
-    int[][][] dp ;
     public int maxProfit(int[] p) {
         int n = p.length;
-        dp = new int[n][2][2];
-        for(int i =0;i<n;i++){
-            for(int j =0;j<2;j++){
-                for(int k =0;k<2;k++){
-                    dp[i][j][k] = -1;
+        int[][][] dp = new int[n+1][2][3];
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 0; j <= 1; j++) {
+                for (int k = 1; k <= 2; k++) {
+
+                    int ans;
+
+                    if (j == 0) { 
+                        int c1 = -p[i] + dp[i + 1][1][k];
+                        int c2 = dp[i + 1][0][k];
+                        ans = Math.max(c1, c2);
+                    } else { 
+                        int c1 = p[i] + dp[i + 1][0][k - 1];
+                        int c2 = dp[i + 1][1][k];
+                        ans = Math.max(c1, c2);
+                    }
+
+                    dp[i][j][k] = ans;
                 }
             }
         }
-        return help(p,0,0,2);
-    }
 
-    public int help(int[] p,int buy,int idx ,int l){
-        int n = p.length;
-        if(idx == n) return 0;
-        if(l==0) return 0;
-        int ans =Integer.MIN_VALUE;
-
-        if(dp[idx][l-1][buy] != -1) return dp[idx][l-1][buy];
-
-        if(buy==0){
-            int c1= -p[idx] + help(p,1,idx+1,l);
-            int c2 = help(p,0,idx+1,l);
-            ans = Math.max(c1,c2);
-        }else{
-            int c1 = p[idx]+help(p,0,idx+1,l-1);
-            int c2 = help(p,1,idx+1,l);
-            ans = Math.max(c1,c2);
-        }
-        dp[idx][l-1][buy] = ans;
-
-        return ans;
+        return dp[0][0][2];
     }
 }
