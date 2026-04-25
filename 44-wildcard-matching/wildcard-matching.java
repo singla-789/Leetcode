@@ -8,7 +8,6 @@ class Solution {
         dp[0][0] = true;
         for(int i =1;i<=m;i++){
             char a = p.charAt(i-1);
-            if(i==1 && (a=='*')) dp[0][i] = true;
             if(a=='*' && dp[0][i-1]) dp[0][i] = true;
         }
 
