@@ -1,46 +1,63 @@
 class Solution {
-    int[][][] memo;
     public int maxPathScore(int[][] grid, int k) {
-        int m = grid.length, n = grid[0].length;
-        memo = new int[m][n][k+1];
-        for(int i=0;i<m;i+=1){
-            for(int j=0;j<n;j+=1){
-                Arrays.fill(memo[i][j],Integer.MIN_VALUE / 2);
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int[][][] dp = new int[n][m][k+1];
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                for(int c = 0; c <= k; c++){
+                    dp[i][j][c] = -1;
+                }
             }
         }
-        return helper(m,n,k,0,0,grid);
-    }
-    private int helper(int m, int n,int k,int i, int j,int[][] grid){
-        if(i==m-1 && j==n-1){
-            int cost = grid[i][j] == 0 ? 0 : 1;
-            if( k >= cost){
-                return grid[i][j];
+
+        int startCost = grid[0][0] == 0 ? 0 : 1;
+        if(startCost <= k) {
+            dp[0][0][startCost] = grid[0][0];
+        }
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                for(int c = 0; c <= k; c++){
+
+                    // ✅ FIXED CONDITION
+                    if(dp[i][j][c] == -1) continue;
+
+                    // move down
+                    if(i + 1 < n){
+                        int val = grid[i+1][j];
+                        int cost = (val == 0 ? 0 : 1);
+                        int nc = c + cost;
+
+                        if(nc <= k){
+                            dp[i+1][j][nc] = Math.max(dp[i+1][j][nc],
+                                                       dp[i][j][c] + val);
+                        }
+                    }
+
+                    // move right
+                    if(j + 1 < m){
+                        int val = grid[i][j+1];
+                        int cost = (val == 0 ? 0 : 1);
+                        int nc = c + cost;
+
+                        if(nc <= k){
+                            dp[i][j+1][nc] = Math.max(dp[i][j+1][nc],
+                                                       dp[i][j][c] + val);
+                        }
+                    }
+                }
             }
-            return -1;
         }
-        if(i >= m || j >= n){
-            return -1;
+
+        int ans = -1;
+
+        for(int i = 0; i <= k; i++){
+            ans = Math.max(ans, dp[n-1][m-1][i]);
         }
-        if(memo[i][j][k] != Integer.MIN_VALUE / 2){
-            return memo[i][j][k];
-        }
-        int score = -1, cost = grid[i][j] == 0 ? 0 : 1;
-        if(i+1 < m && cost <= k){
-            // down,
-            int down = helper(m,n,k-cost,i+1,j,grid);
-            if(down != -1){
-                down += grid[i][j];
-            }
-            score = Math.max(down,score);
-        }
-        if(j+1 < n && cost <= k){
-            // right,
-            int right = helper(m,n,k-cost,i,j+1,grid);
-            if(right != -1){
-                right += grid[i][j];
-            }
-            score = Math.max(right,score);
-        }
-        return memo[i][j][k] = score;
+
+        return ans;
     }
 }
