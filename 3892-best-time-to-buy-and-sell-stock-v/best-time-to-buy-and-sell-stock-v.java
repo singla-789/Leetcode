@@ -1,68 +1,31 @@
 class Solution {
-    long[][][] dp;
-
-    public long maximumProfit(int[] p, int k) {
-        int n = p.length;
-        dp = new long[n][3][k];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int a = 0; a < k; a++) {
-                    dp[i][j][a] = Long.MIN_VALUE;
-                }
+    class State {
+        long maxProfit, buyHold, sellHold;
+        State(long p, long b, long s) {
+            maxProfit = p;
+            buyHold = b;
+            sellHold = s;
+        }
+    }
+    
+    public long maximumProfit(int[] prices, int k) {
+        int firstPrice = prices[0];
+        State[] dp = new State[k + 1];
+        for (int idx = 0; idx <= k; idx++) {
+            dp[idx] = new State(0, -firstPrice, firstPrice);
+        }
+        int n = prices.length;
+        
+        for (int day = 1; day < n; day++) {
+            int currPrice = prices[day];
+            for (int trans = k; trans > 0; trans--) {
+                long prevProfit = dp[trans - 1].maxProfit;
+                dp[trans].maxProfit = Math.max(dp[trans].maxProfit, Math.max(dp[trans].buyHold + currPrice, dp[trans].sellHold - currPrice));
+                dp[trans].buyHold = Math.max(dp[trans].buyHold, prevProfit - currPrice);
+                dp[trans].sellHold = Math.max(dp[trans].sellHold, prevProfit + currPrice);
             }
         }
-
-        return help(p, 0, 2, k);
-    }
-
-    public long help(int[] p, int idx, int tra, int lim) {
-        int n = p.length;
-
-        if (idx == n) {
-            return (tra == 2) ? 0 : Long.MIN_VALUE;
-        }
-
-        if (lim == 0) {
-            return (tra == 2) ? 0 : Long.MIN_VALUE;
-        }
-
-        if (dp[idx][tra][lim - 1] != Long.MIN_VALUE)
-            return dp[idx][tra][lim - 1];
-
-        long ans = Long.MIN_VALUE;
-
-        if (tra == 2) {
-            long skip = help(p, idx + 1, 2, lim);
-            ans = Math.max(ans, skip);
-
-            long next;
-            next = help(p, idx + 1, 0, lim);
-            if (next != Long.MIN_VALUE)
-                ans = Math.max(ans, -p[idx] + next);
-            next = help(p, idx + 1, 1, lim);
-            if (next != Long.MIN_VALUE)
-                ans = Math.max(ans, p[idx] + next);
-        }
-
-        else if (tra == 0) {
-            long hold = help(p, idx + 1, 0, lim);
-            ans = Math.max(ans, hold);
-
-            long next = help(p, idx + 1, 2, lim - 1);
-            if (next != Long.MIN_VALUE)
-                ans = Math.max(ans, p[idx] + next);
-        }
-
-        else {
-            long hold = help(p, idx + 1, 1, lim);
-            ans = Math.max(ans, hold);
-
-            long next = help(p, idx + 1, 2, lim - 1);
-            if (next != Long.MIN_VALUE)
-                ans = Math.max(ans, -p[idx] + next);
-        }
-
-        return dp[idx][tra][lim - 1] = ans;
+        
+        return dp[k].maxProfit;
     }
 }
