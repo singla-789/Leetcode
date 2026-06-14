@@ -6,6 +6,7 @@ class Solution {
         int r = Integer.MIN_VALUE;
         for(int a: piles){
             r = Math.max(r,a);
+            
         }
 
         while(l<r){
