@@ -3,13 +3,11 @@ class Solution {
         ListNode slow = head;
         ListNode fast = head;
 
-        // Step 1: Find middle
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // Step 2: Reverse second half
         ListNode prev = null;
         while (slow != null) {
             ListNode next = slow.next;
@@ -18,7 +16,6 @@ class Solution {
             slow = next;
         }
 
-        // Step 3: Calculate twin sum
         int ans = Integer.MIN_VALUE;
         ListNode first = head;
         ListNode second = prev;
@@ -31,4 +28,5 @@ class Solution {
 
         return ans;
     }
+
 }
