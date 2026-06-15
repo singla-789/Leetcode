@@ -26,6 +26,7 @@ class Solution {
                 count++;
                 i++;
             }
+            
 
             if (count == k) {
                 total++;
