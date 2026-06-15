@@ -21,11 +21,11 @@ class Solution {
         int n = nums.length;
         int sum=0;
         for(int i=0;i<n;i++){
-            double a = Math.ceil((double) nums[i] / m);
+            double a = (nums[i]+m-1)/m;
             sum += (int)a;
         }
 
-        return sum<=t ? true : false;
+        return sum<=t;
     }
 
 }
