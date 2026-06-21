@@ -1,25 +1,31 @@
 class Solution {
-    int[] dr = {-1,0,1,0};
-    int[] dc = {0,1,0,-1};
 
-    public void dfs(int[][] arr,int i,int j,int col,boolean[][] vis,int s){
-        arr[i][j] = col;
-        vis[i][j] = true;
+    int[] dr = new int[]{0,-1,0,1};
+    int[] dc = new int[]{1,0,-1,0};
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int n = image.length;
+        int m = image[0].length;
 
-        for(int k=0;k<4;k++){
-            int ni = i+dr[k];
-            int nj = j+dc[k];
+        if(image[sr][sc] == color) return image;
 
-            if(ni>=0 && ni<arr.length && nj>=0 && nj<arr[0].length && arr[ni][nj] ==s){
-                if(!vis[ni][nj]) dfs(arr,ni,nj,col,vis,s);
-            }
-        }
+        boolean vis[][] = new boolean[n][m];
+
+        dfs(image,vis,sr,sc,color,image[sr][sc]);
+
+        return image;
     }
 
-    public int[][] floodFill(int[][] arr, int sr, int sc, int col) {
-        if(arr[sr][sc] == col) return arr;
-        boolean[][] vis = new boolean[arr.length][arr[0].length];
-        dfs(arr,sr,sc,col,vis,arr[sr][sc]);
-        return arr;  
+    public void dfs(int[][] arr,boolean vis[][],int sr,int sc,int color,int st){
+        int n = arr.length;
+        int m = arr[0].length;
+        vis[sr][sc] = true;
+        arr[sr][sc] = color;
+        for(int i =0;i<4;i++){
+            int r = sr + dr[i];
+            int c = sc + dc[i];
+            if(r>=0 && r<n && c>=0 && c<m && !vis[r][c] && arr[r][c]==st){
+                dfs(arr,vis,r,c,color,st);
+            }
+        }
     }
 }
